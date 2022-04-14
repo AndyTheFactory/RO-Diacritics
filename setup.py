@@ -10,7 +10,7 @@ setup(
     # $ pip install sampleproject
     name='ro-diacritics',  # Required
 
-    version='0.9.0',  # Required
+    version='0.9.2',  # Required
 
     description='Python API for Romanian diacritics restoration',  # Required
 
@@ -21,7 +21,7 @@ setup(
     author="Andrei Paraschiv",
     author_email="andrei@thephpfactory.com",
 
-    # url='https://github.com/AndyTheFactory/RO-Diacritics',  # Optional
+    url='https://github.com/AndyTheFactory/RO-Diacritics',  # Optional
 
     classifiers=[  # Optional
         #   3 - Alpha

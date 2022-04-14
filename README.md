@@ -30,3 +30,9 @@ $ pip install ro-diacritics
  * torch and torchtext
  * numpy 
  * nltk and sklearn (for training)
+
+## References
+
+- Ruseti, S., Cotet, T. M., & Dascalu, M. (2020). Romanian Diacritics Restoration Using Recurrent Neural Networks. arXiv preprint arXiv:2009.02743.
+- https://github.com/teodor-cotet/DiacriticsRestoration
+
