@@ -1,7 +1,22 @@
 import torch
 import torch.nn as nn
 
+
 class Diacritics(nn.Module):
+    """
+    The pytorch model :class:Diacritics for diacritics restoration
+        :param nr_classes:
+        :param word_embedding_size:
+        :param character_embedding_size:
+        :param char_vocabulary_size:
+        :param char_padding_index:
+        :param character_window:
+        :param sentence_window:
+        :param characters_lstm_size:
+        :param sentence_lstm_size:
+        :param dropout:
+
+    """
     def __init__(self, nr_classes=3, word_embedding_size=300,
                  character_embedding_size=20, char_vocabulary_size=771, char_padding_index=0,
                  character_window=13, sentence_window=31,

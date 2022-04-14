@@ -21,7 +21,7 @@ setup(
     author="Andrei Paraschiv",
     author_email="andrei@thephpfactory.com",
 
-    url='https://github.com/AndyTheFactory/RO-Diacritics',  # Optional
+    # url='https://github.com/AndyTheFactory/RO-Diacritics',  # Optional
 
     classifiers=[  # Optional
         #   3 - Alpha
@@ -48,16 +48,12 @@ setup(
         'Programming Language :: Python :: 3'
     ],
 
-    keywords='romanian diacritcs language restoration diacritice python',  # Optional
+    keywords='romanian diacritcs language restoration diacritice python',
 
-    # packages=find_packages(exclude=['jupyter']),  # Required
-    packages=find_packages("."),  # Required
+    # package_dir={"": "."},
+    packages=find_packages(),
 
-    install_requires=['torch', 'numpy', 'tqdm', 'nltk', 'sklearn'],  # Optional
+    install_requires=['torch', 'torchtext', 'numpy', 'tqdm', 'nltk', 'sklearn',],
 
     zip_safe=False,
-
-    package_data={  # Optional
-
-    }
 )

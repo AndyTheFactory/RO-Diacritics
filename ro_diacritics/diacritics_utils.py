@@ -1,5 +1,7 @@
 import re
 
+LOG_NAME = 'ro-diacritics'
+
 MAP_DIACRITICS = {
     "ă": "a",
     "â": "a",

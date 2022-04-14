@@ -1,10 +1,12 @@
 import zipfile
+import logging
 from pathlib import Path
 
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, IterableDataset
 from collections import OrderedDict
+from urllib.request import urlretrieve
 
 from tqdm import tqdm
 
@@ -12,7 +14,9 @@ from .diacritics_dataset import DiacriticsDataset
 from .diacritics_model import Diacritics
 from .diacritcs_train import predict
 from . import diacritics_dataset
-from urllib.request import urlretrieve
+from .diacritics_utils import LOG_NAME
+
+logger = logging.getLogger(LOG_NAME)
 
 _model: Diacritics = None
 _dataset: DiacriticsDataset = None
@@ -67,7 +71,7 @@ def load_model(filename) -> (Diacritics, DiacriticsDataset):
     model.load_state_dict(checkpoint['model_state'])
 
     checkpoint['valid_f1'] = checkpoint['valid_f1'] if 'valid_f1' in checkpoint else 0
-    print(f"Loaded checkpoint: Epoch: {checkpoint['epoch']}, valid_acc: {checkpoint['valid_acc']}, valid_f1: {checkpoint['valid_f1']}")
+    logger.info(f"Loaded checkpoint: Epoch: {checkpoint['epoch']}, valid_acc: {checkpoint['valid_acc']}, valid_f1: {checkpoint['valid_f1']}")
 
     return model, checkpoint['vocabulary']
 
@@ -77,6 +81,10 @@ def initmodel(filename=None):
         filename = get_cached_model()
     _model, vocab = load_model(filename)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    if device == 'cpu':
+        logger.warning("GPU not available, using CPU")
+    else:
+        logger.info("GPU available")
     _model = _model.to(device)
     _dataset = DiacriticsDataset("", _model.character_window, _model.sentence_window,
                                  diacritics_vocab=vocab)
