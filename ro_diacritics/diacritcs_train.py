@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from envs.tf1.Lib.distutils.command.check import check
 from torch.utils.data import DataLoader
 import numpy as np
 import torch
