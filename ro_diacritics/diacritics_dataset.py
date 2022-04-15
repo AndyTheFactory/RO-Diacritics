@@ -1,21 +1,20 @@
-from functools import reduce
+import pickle as pkl
+from collections import Counter
+from pathlib import Path
 
+import numpy as np
 import torch
-from torchtext.vocab import FastText
-from torch.utils.data import Dataset
-from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.tokenize import TreebankWordTokenizer, PunktSentenceTokenizer
+from nltk.tokenize import sent_tokenize, word_tokenize
+from torch.utils.data import IterableDataset
+from torchtext.vocab import FastText
+
 from .diacritics_utils import (
     correct_diacritics,
     remove_diacritics,
     has_interesting_chars,
     DIACRITICS_CANDIDATES,
 )
-from torch.utils.data import IterableDataset
-import numpy as np
-from collections import Counter
-from pathlib import Path
-import pickle as pkl
 
 
 class DiacriticsVocab:
