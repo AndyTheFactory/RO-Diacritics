@@ -10,7 +10,7 @@ setup(
     # $ pip install sampleproject
     name='ro-diacritics',  # Required
 
-    version='0.9.2',  # Required
+    version='0.9.3',  # Required
 
     description='Python API for Romanian diacritics restoration',  # Required
 
@@ -53,7 +53,7 @@ setup(
     # package_dir={"": "."},
     packages=find_packages(),
 
-    install_requires=['torch', 'torchtext', 'numpy', 'tqdm', 'nltk', 'sklearn',],
+    install_requires=['torch', 'torchtext', 'numpy', 'tqdm', 'nltk', 'scikit-learn',],
 
     zip_safe=False,
 )
