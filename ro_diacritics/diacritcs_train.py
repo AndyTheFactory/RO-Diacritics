@@ -116,11 +116,11 @@ def train(
                 )
                 average_train_loss = running_loss / step
                 print(
-                    f"Epoch {epoch+1} / Step: {step},
-                    Loss: {loss.item()},
-                    Avg Loss: {average_train_loss} ,
-                    Train ACC: {epoch_accuracy},
-                    Train F1: {epoch_f1_metrics}",
+                    f"Epoch {epoch+1} / Step: {step}, "
+                    f"Loss: {loss.item()}, "
+                    f"Avg Loss: {average_train_loss} , "
+                    f"Train ACC: {epoch_accuracy}, "
+                    f"Train F1: {epoch_f1_metrics} "
                 )
 
             if step % 10000 == 0:
