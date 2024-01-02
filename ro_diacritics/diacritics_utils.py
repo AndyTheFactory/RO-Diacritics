@@ -75,3 +75,14 @@ def has_interesting_chars(word):
     # use these three lines to do the replacement
     pattern = re.compile("|".join(DIACRITICS_CANDIDATES))
     return pattern.search(str(word)) is not None
+
+__all__ = [
+    "correct_diacritics",
+    "remove_diacritics",
+    "has_interesting_chars",
+    "MAP_DIACRITICS",
+    "ALL_CANDIDATES",
+    "DIACRITICS_CANDIDATES",
+    "MAP_CORRECT_DIACRITICS",
+    "MAP_POSSIBLE_CHARS",
+]
