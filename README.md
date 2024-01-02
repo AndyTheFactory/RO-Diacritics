@@ -14,12 +14,12 @@ from ro_diacritics import restore_diacritics
 df['text-diacritice'] = df['text'].apply(restore_diacritics)
 ```
 
-## Installing 
+## Installing
 
 ```console
 $ python -m pip install ro-diacritics
 ```
-or 
+or
 
 ```console
 $ pip install ro-diacritics
@@ -28,11 +28,10 @@ $ pip install ro-diacritics
 ## Requirements
 
  * torch and torchtext
- * numpy 
- * nltk and sklearn (for training)
+ * numpy
+ * nltk and scikit-learn (for training)
 
 ## References
 
 - Ruseti, S., Cotet, T. M., & Dascalu, M. (2020). Romanian Diacritics Restoration Using Recurrent Neural Networks. arXiv preprint arXiv:2009.02743.
 - https://github.com/teodor-cotet/DiacriticsRestoration
-
