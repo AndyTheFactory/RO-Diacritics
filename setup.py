@@ -10,7 +10,7 @@ setup(
     # $ pip install sampleproject
     name='ro-diacritics',  # Required
 
-    version='0.9.3',  # Required
+    version='0.9.4',  # Required
 
     description='Python API for Romanian diacritics restoration',  # Required
 
