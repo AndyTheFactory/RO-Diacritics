@@ -30,6 +30,7 @@ $ pip install ro-diacritics
  * torch and torchtext
  * numpy
  * nltk and scikit-learn (for training)
+ * needs nltk.download('punkt') for tokenization
 
 ## References
 
