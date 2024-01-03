@@ -122,7 +122,7 @@ def restore_diacritics(text, batch_size=128):
     :param batch_size: Adjust the batch size according to the available memory.
     :return: text with diacrtics replaced
     """
-    if _model is None:
+    if _model is None or _dataset is None:
         initmodel()
 
     input_tensors, character_indices = _dataset.gen_batch(text, stride=10)

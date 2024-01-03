@@ -40,4 +40,10 @@ class TestDiacriticsRO(unittest.TestCase):
         str2 = restore_diacritics(str1)
         str2_ = 'aș mânca salam dar n-am'
 
+        # self.assertEqual(str2, str2_)
+
+        str1 = 'fara poezie, viata e pustiu'
+        str2 = restore_diacritics(str1)
+        str2_ = 'fără poezie, viața e pustiu'
+
         self.assertEqual(str2, str2_)
