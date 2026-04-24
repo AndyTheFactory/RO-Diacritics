@@ -53,7 +53,14 @@ setup(
     # package_dir={"": "."},
     packages=find_packages(),
 
-    install_requires=['torch>=2.0', 'fasttext-wheel', 'numpy', 'tqdm', 'nltk', 'scikit-learn'],
+    install_requires=[
+        'torch>=2.0',
+        'fasttext-wheel',
+        'numpy',
+        'tqdm',
+        'nltk',
+        'scikit-learn',
+    ],
 
     zip_safe=False,
 )

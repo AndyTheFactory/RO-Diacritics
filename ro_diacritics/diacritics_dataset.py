@@ -159,6 +159,7 @@ class DiacriticsDataset(IterableDataset):
         self.texts, distinct_tokens = self.load_texts(data, self.min_line_length)
         self.max_vocab = max_vocab
         self.pad_character = 0
+        self._sent_tokenizer = PunktSentenceTokenizer()
 
         if diacritics_vocab is None:
             self.max_char_vocab = max_char_vocab
@@ -392,11 +393,11 @@ class DiacriticsDataset(IterableDataset):
             * ``character_indices`` – list of absolute character offsets into
               *text* corresponding to each entry in *input_tensors*.
         """
-        lines = PunktSentenceTokenizer().span_tokenize(text)
+        sentence_spans = self._sent_tokenizer.span_tokenize(text)
         character_indices = []
         input_tensors = []
 
-        for line_span in lines:
+        for line_span in sentence_spans:
             line = text[line_span[0] : line_span[1]]
             words = list(TreebankWordTokenizer().span_tokenize(line))
             word_indices = np.arange(len(words))
