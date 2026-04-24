@@ -1,3 +1,5 @@
+"""High-level inference helpers: model loading, downloading, and diacritics restoration."""
+
 import zipfile
 import logging
 from pathlib import Path
@@ -26,6 +28,22 @@ MODEL_FILE = "diacritice.pt"
 MODEL_URL = (
     "https://github.com/AndyTheFactory/andythefactory.github.io/raw/main/diacritice.zip"
 )
+
+
+class _TensorListDataset(IterableDataset):
+    """Lightweight :class:`~torch.utils.data.IterableDataset` wrapper around a
+    plain list of tensors produced by :meth:`~DiacriticsDataset.gen_batch`.
+
+    :param input_tensors: List of ``[char_tensor, word_emb, sentence_emb]``
+        triples.
+    """
+
+    def __init__(self, input_tensors):
+        self.input_tensors = input_tensors
+
+    def __iter__(self):
+        """Yield each tensor triple in order."""
+        return iter(self.input_tensors)
 
 
 def get_cached_model():
@@ -63,18 +81,24 @@ def get_cached_model():
         return filename
 
 
-def load_model(filename) -> (Diacritics, DiacriticsDataset):
-    """
-    Loads a trained :class:Diacritics model from cached file.
-    Also, used hyperparams are loaded from the file
-    :param filename: local path to stored model
-    :return: loaded :class:Diacritics object and the used vocabulary (must be the same as in training)
+def load_model(filename) -> tuple[Diacritics, DiacriticsDataset]:
+    """Load a trained :class:`~diacritics_model.Diacritics` model from a
+    checkpoint file.
+
+    The checkpoint is expected to contain the model ``state_dict``,
+    hyper-parameters, a serialised :class:`~diacritics_dataset.DiacriticsVocab`
+    vocabulary, and optional evaluation metrics.
+
+    :param filename: Path to the ``.pt`` checkpoint produced by
+        :meth:`~diacritics_model.Diacritics.save`.
+    :return: Tuple of the reconstructed :class:`~diacritics_model.Diacritics`
+        model (in eval mode) and the saved vocabulary object.
     """
     import sys
 
     sys.modules["diacritics_dataset"] = diacritics_dataset
 
-    checkpoint = torch.load(filename, map_location="cpu")
+    checkpoint = torch.load(filename, map_location="cpu", weights_only=False)
     params = checkpoint["hyperparams"]
     model = Diacritics(
         nr_classes=params["nr_classes"],
@@ -89,7 +113,7 @@ def load_model(filename) -> (Diacritics, DiacriticsDataset):
     )
     model.load_state_dict(checkpoint["model_state"])
 
-    checkpoint["valid_f1"] = checkpoint["valid_f1"] if "valid_f1" in checkpoint else 0
+    checkpoint["valid_f1"] = checkpoint.get("valid_f1", 0)
     logger.info(
         f"Loaded checkpoint: Epoch: {checkpoint['epoch']}, valid_acc: {checkpoint['valid_acc']}, valid_f1: {checkpoint['valid_f1']}"
     )
@@ -98,12 +122,20 @@ def load_model(filename) -> (Diacritics, DiacriticsDataset):
 
 
 def initmodel(filename=None):
+    """Initialise the global model and dataset used by :func:`restore_diacritics`.
+
+    Downloads the pre-trained checkpoint when *filename* is ``None`` and the
+    cached file does not exist yet.
+
+    :param filename: Optional path to a local ``.pt`` checkpoint file.  When
+        omitted the default cached model is used (downloaded on first call).
+    """
     global _model, _dataset
     if filename is None:
         filename = get_cached_model()
     _model, vocab = load_model(filename)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    if device == "cpu":
+    if device.type == "cpu":
         logger.warning("GPU not available, using CPU")
     else:
         logger.info("GPU available")
@@ -127,14 +159,7 @@ def restore_diacritics(text, batch_size=128):
 
     input_tensors, character_indices = _dataset.gen_batch(text, stride=10)
 
-    class DS(IterableDataset):
-        def __init__(self, input_tensors):
-            self.input_tensors = input_tensors
-
-        def __iter__(self):
-            return iter(self.input_tensors)
-
-    input_data = DataLoader(DS(input_tensors), batch_size=batch_size)
+    input_data = DataLoader(_TensorListDataset(input_tensors), batch_size=batch_size)
 
     predictions = predict(_model, input_data)
 

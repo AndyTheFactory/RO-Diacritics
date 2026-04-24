@@ -1,3 +1,5 @@
+"""PyTorch model definition for Romanian diacritics restoration."""
+
 import torch
 import torch.nn as nn
 
@@ -146,6 +148,20 @@ class Diacritics(nn.Module):
         return out
 
     def save(self, filename, vocabulary, epoch=None, valid_acc=0.0, valid_f1=0.0):
+        """Serialise the model weights, hyper-parameters and vocabulary to
+        *filename* using :func:`torch.save`.
+
+        The resulting checkpoint can be loaded with
+        :func:`~diacritics_inference.load_model`.
+
+        :param filename: Destination file path for the checkpoint.
+        :param vocabulary: The :class:`~diacritics_dataset.DiacriticsVocab`
+            instance used during training (saved alongside the model so that
+            inference can reuse the same embeddings and character mappings).
+        :param epoch: Training epoch at which this checkpoint was saved.
+        :param valid_acc: Validation accuracy achieved at this checkpoint.
+        :param valid_f1: Weighted F1 score achieved at this checkpoint.
+        """
         to_save = {
             "epoch": epoch,
             "model_state": self.state_dict(),
